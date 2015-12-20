@@ -5,7 +5,7 @@
 
 int main()
 {
-	Analyser analyser("test1.txt");
+	Analyser analyser("Grammar1.txt");
 	const Grammar& grammar = analyser.getGrammar();
 	auto first = grammar.getFirst();
 	for (auto it = first.begin(); it != first.end(); it++)
@@ -34,5 +34,11 @@ int main()
 		}
 		std::cout << "}" << std::endl;
 	}
+
+	std::cout << std::endl;
+
+	analyser.isAcceptable("test1.txt");
+
+
 	return 0;
 }

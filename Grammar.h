@@ -8,7 +8,6 @@ class Grammar
 {
 public:
 	explicit Grammar(const std::string& fileName);
-	Grammar(const Grammar& grammar);
 	const std::map<std::string, std::set<char>>& getFirst() const;
 	const std::map<char, std::set<char>>& getFollow() const;
 	const std::multimap<char, std::string>& getRules() const;
