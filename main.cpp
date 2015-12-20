@@ -1,10 +1,12 @@
 #include <iostream>
 
+#include "Analyser.h"
 #include "Grammar.h"
 
 int main()
 {
-	Grammar grammar("test1.txt");
+	Analyser analyser("test1.txt");
+	const Grammar& grammar = analyser.getGrammar();
 	auto first = grammar.getFirst();
 	for (auto it = first.begin(); it != first.end(); it++)
 	{

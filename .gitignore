@@ -46,6 +46,7 @@ artifacts/
 *_p.c
 *_i.h
 *.ilk
+*.filters
 *.meta
 *.obj
 *.pch
@@ -54,6 +55,7 @@ artifacts/
 *.pgd
 *.rsp
 *.sbr
+*.sln
 *.tlb
 *.tli
 *.tlh
@@ -62,6 +64,7 @@ artifacts/
 *.log
 *.vspscc
 *.vssscc
+*.vsxproj
 .builds
 *.pidb
 *.svclog
