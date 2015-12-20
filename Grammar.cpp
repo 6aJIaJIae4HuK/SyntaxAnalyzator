@@ -8,6 +8,8 @@ Grammar::Grammar(const std::string& fileName)
 	std::string line;
 	int pos = std::string::npos;
 	bool first = true;
+	m_terminals.insert('~');
+	m_terminals.insert('$');
 	while (std::getline(input, line))
 	{
 		pos = line.find('>');
@@ -43,6 +45,7 @@ Grammar::Grammar(const std::string& fileName)
 	}
 	generateFirst();
 	generateFollow();
+	generateTable();
 }
 
 void Grammar::generateFirst()
@@ -165,6 +168,41 @@ void Grammar::generateFollow()
 	}
 }
 
+void Grammar::generateTable()
+{
+	for (auto rule = m_rules.begin(); rule != m_rules.end(); rule++)
+	{
+		generateFirst(rule->second);
+		for (auto it = m_first[rule->second].begin(); it != m_first[rule->second].end(); it++)
+		{
+			if (m_terminals.find(*it) != m_terminals.end())
+			{
+				if (*it != '~')
+				{
+					m_table[std::make_pair(rule->first, *it)] = *rule;
+				}
+				else
+				{
+					for (auto it1 = m_follow[rule->first].begin(); it1 != m_follow[rule->first].end(); it1++)
+					{
+						m_table[std::make_pair(rule->first, *it1)] = *rule;
+					}
+				}
+			}
+		}
+	}
+	for (auto nonTerminal = m_nonTerminals.begin(); nonTerminal != m_nonTerminals.end(); nonTerminal++)
+	{
+		for (auto terminal = m_terminals.begin(); terminal != m_terminals.end(); terminal++)
+		{
+			if (*terminal != '~' && m_table.find(std::make_pair(*nonTerminal, *terminal)) == m_table.end())
+			{
+				m_table[std::make_pair(*nonTerminal, *terminal)] = std::make_pair(0, "");
+			}
+		}
+	}
+}
+
 const std::map<std::string, std::set<char>>& Grammar::getFirst() const
 {
 	return m_first;
@@ -173,6 +211,31 @@ const std::map<std::string, std::set<char>>& Grammar::getFirst() const
 const std::map<char, std::set<char>>& Grammar::getFollow() const
 {
 	return m_follow;
+}
+
+const std::multimap<char, std::string>& Grammar::getRules() const
+{
+	return m_rules;
+}
+
+const std::map<std::pair<char, char>, std::pair<char, std::string>>& Grammar::getTable() const
+{
+	return m_table;
+}
+
+const std::set<char>& Grammar::getTerminales() const
+{
+	return m_terminals;
+}
+
+const std::set<char>& Grammar::getNonTerminals() const
+{
+	return m_nonTerminals;
+}
+
+const char& Grammar::getFirstNonTerminal() const
+{
+	return m_firstNonTerminal;
 }
 
 std::string Grammar::toString(const char& c) const

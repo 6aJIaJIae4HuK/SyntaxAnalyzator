@@ -142,9 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Analyser.h" />
     <ClInclude Include="Grammar.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Analyser.cpp" />
     <ClCompile Include="Grammar.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
