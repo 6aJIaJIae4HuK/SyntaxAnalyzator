@@ -13,7 +13,7 @@ const Grammar& Analyser::getGrammar() const
 	return m_grammar;
 }
 
-bool Analyser::isAcceptable(const std::string& fileName)
+void Analyser::parseFromFile(const std::string& fileName)
 {
 	std::ifstream inputFile(fileName);
 	std::string inputString = "";
@@ -38,22 +38,32 @@ bool Analyser::isAcceptable(const std::string& fileName)
 	m_stack.push_back('$');
 	m_stack.push_back(m_grammar.getFirstNonTerminal());
 
+	m_errorCount = 0;
+
+	auto table = m_grammar.getTable();
+	std::string error = "";
+	bool inError = false;
+
 	do
 	{
 		char X = m_stack.back();
 		char a = inputString.front();
-		auto table = m_grammar.getTable();
+		error = "";
 		if (m_grammar.getTerminales().find(m_stack.back()) != m_grammar.getTerminales().end())
 		{
 			if (X == a)
 			{
+				std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
 				m_stack.pop_back();
 				inputString = inputString.substr(1);
 			}
 			else
 			{
-				std::cout << "ERROR" << std::endl;
-				return false;
+				error = "Syntax ERROR";
+				std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
+				m_stack.pop_back();
+				inError = true;
+				m_errorCount++;
 			}
 		}
 		else
@@ -62,6 +72,8 @@ bool Analyser::isAcceptable(const std::string& fileName)
 				m_grammar.getNonTerminals().find(table.at(std::make_pair(X, a)).first) != 
 				m_grammar.getNonTerminals().end())
 			{
+				std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
+
 				m_stack.pop_back();
 				for (auto it = table.at(std::make_pair(X, a)).second.rbegin();
 						  it != table.at(std::make_pair(X, a)).second.rend();
@@ -70,15 +82,33 @@ bool Analyser::isAcceptable(const std::string& fileName)
 					if (*it != '~')
 						m_stack.push_back(*it);
 				}
-				std::cout << X << " -> " << table.at(std::make_pair(X, a)).second << std::endl;
 			}
 			else
 			{
-				std::cout << "ERROR" << std::endl;
-				return true;
+				if (table.at(std::make_pair(X, a)).first == 0 || !inError)
+				{
+					error = "Error: Skip symbol";
+					std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
+					inputString = inputString.substr(1);
+					inError = true;
+					m_errorCount++;
+				}
+				else
+				if (table.at(std::make_pair(X, a)).first == 1)
+				{
+					error = "Synched";
+					std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
+					m_stack.pop_back();
+					inError = false;
+				}
 			}
 		}
+		
 	} while (m_stack.back() != '$');
+	std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
+}
 
-	return true;
+int Analyser::getErrorCount() const
+{
+	return m_errorCount;
 }

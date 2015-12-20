@@ -9,9 +9,10 @@ class Analyser
 public:
 	explicit Analyser(const std::string& grammarFileName);
 	const Grammar& getGrammar() const;
-	bool isAcceptable(const std::string& fileName);
+	void parseFromFile(const std::string& fileName);
+	int getErrorCount() const;
 private:
 	Grammar m_grammar;
-	std::vector<char> m_stack;
-
+	std::string m_stack;
+	int m_errorCount;
 };

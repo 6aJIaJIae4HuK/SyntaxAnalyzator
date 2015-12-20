@@ -10,7 +10,7 @@ int main()
 	auto first = grammar.getFirst();
 	for (auto it = first.begin(); it != first.end(); it++)
 	{
-		std::cout << "FIRST(" << it->first << ") = {";
+		std::cout << "FIRST('" << it->first << "') = {";
 		for (auto it1 = it->second.begin(); it1 != it->second.end(); it1++)
 		{
 			if (it1 != it->second.begin())
@@ -25,7 +25,7 @@ int main()
 	auto follow = grammar.getFollow();
 	for (auto it = follow.begin(); it != follow.end(); it++)
 	{
-		std::cout << "FOLLOW(" << it->first << ") = {";
+		std::cout << "FOLLOW('" << it->first << "') = {";
 		for (auto it1 = it->second.begin(); it1 != it->second.end(); it1++)
 		{
 			if (it1 != it->second.begin())
@@ -37,8 +37,9 @@ int main()
 
 	std::cout << std::endl;
 
-	analyser.isAcceptable("test1.txt");
+	analyser.parseFromFile("test1.txt");
 
+	std::cout << std::endl << "Count of errors: " << analyser.getErrorCount() << std::endl;
 
 	return 0;
 }

@@ -197,7 +197,15 @@ void Grammar::generateTable()
 		{
 			if (*terminal != '~' && m_table.find(std::make_pair(*nonTerminal, *terminal)) == m_table.end())
 			{
-				m_table[std::make_pair(*nonTerminal, *terminal)] = std::make_pair(0, "");
+				if (m_follow[*nonTerminal].find(*terminal) != m_follow[*nonTerminal].end() ||
+					m_first[toString(*nonTerminal)].find(*terminal) != m_first[toString(*nonTerminal)].end())
+				{
+					m_table[std::make_pair(*nonTerminal, *terminal)] = std::make_pair(1, "");
+				}
+				else
+				{
+					m_table[std::make_pair(*nonTerminal, *terminal)] = std::make_pair(0, "");
+				}
 			}
 		}
 	}
