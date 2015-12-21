@@ -21,17 +21,14 @@ void Analyser::parseFromFile(const std::string& fileName)
 	while (std::getline(inputFile, line))
 	{
 		inputString += line;
-		inputString += ' ';
 	}
-	inputString.pop_back();
-	int pos = 0;
-
-	while ((pos = inputString.find("  ")) != std::string::npos)
+	//int pos = 0;
+	/*
+	while ((pos = inputString.find(" ")) != std::string::npos)
 	{
-		inputString.replace(pos, 2, " ");
-		pos++;
+		inputString.replace(pos, 1, "");
 	}
-
+	*/
 	inputString.push_back('$');
 
 	m_stack.clear();
@@ -106,6 +103,8 @@ void Analyser::parseFromFile(const std::string& fileName)
 		
 	} while (m_stack.back() != '$');
 	std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
+	if (inError)
+		m_errorCount++;
 }
 
 int Analyser::getErrorCount() const

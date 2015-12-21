@@ -5,7 +5,8 @@
 
 int main()
 {
-	Analyser analyser("Grammar1.txt");
+	freopen("log.txt", "w", stdout);
+	Analyser analyser("CodeGrammar.txt");
 	const Grammar& grammar = analyser.getGrammar();
 	auto first = grammar.getFirst();
 	for (auto it = first.begin(); it != first.end(); it++)
@@ -37,7 +38,7 @@ int main()
 
 	std::cout << std::endl;
 
-	analyser.parseFromFile("test1.txt");
+	analyser.parseFromFile("code.txt");
 
 	std::cout << std::endl << "Count of errors: " << analyser.getErrorCount() << std::endl;
 

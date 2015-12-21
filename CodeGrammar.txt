@@ -1,0 +1,17 @@
+P>T main(){S}
+T>int|bool|void
+S>~|D;|{S}|FS|IS|R
+D>T XA
+X>CE
+C>a|b|c|d|e|f|g|h|j|i|k|l|m|n|o|p|q|r|s|t|u|x|y|z|_
+E>~|CE
+A>~|=Y
+Y>X|N
+N>QZ
+Q>0|1|2|3|4|5|6|7|8|9
+Z>~|QZ
+F>for(D;B;)
+B>XLX|NLX
+L><|>|==|!=
+I>if(B)
+R>return N;
