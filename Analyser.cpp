@@ -82,7 +82,7 @@ void Analyser::parseFromFile(const std::string& fileName)
 			}
 			else
 			{
-				if (table.at(std::make_pair(X, a)).first == 0 || !inError)
+				if (table.at(std::make_pair(X, a)).first == 0)
 				{
 					error = "Error: Skip symbol";
 					std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
@@ -91,7 +91,7 @@ void Analyser::parseFromFile(const std::string& fileName)
 					m_errorCount++;
 				}
 				else
-				if (table.at(std::make_pair(X, a)).first == 1)
+				if (table.at(std::make_pair(X, a)).first == 1 && inError)
 				{
 					error = "Synched";
 					std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
@@ -101,10 +101,14 @@ void Analyser::parseFromFile(const std::string& fileName)
 			}
 		}
 		
-	} while (m_stack.back() != '$');
-	std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
-	if (inError)
+	} while (m_stack.back() != '$' && !inputString.empty());
+	if (inputString.empty())
+	{
+		inError = true;
+		error = "Syntax error";
 		m_errorCount++;
+	}
+	std::cout << m_stack << " | " << inputString << " | " << error << std::endl;
 }
 
 int Analyser::getErrorCount() const
